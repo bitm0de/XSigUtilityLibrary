@@ -11,7 +11,7 @@ namespace XSigUtilityLibrary.Intersystem
     /// Indexing is not from the start of each signal type but rather from the beginning of the first defined signal
     /// the Intersystem Communications (ISC) symbol.
     /// </remarks>
-    internal static class XSigHelpers
+    public static class XSigHelpers
     {
         /// <summary>
         /// Forces all outputs to 0.
