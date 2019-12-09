@@ -54,7 +54,20 @@ namespace XSigUtilityLibrary.Intersystem
         /// <exception cref="ArgumentException">Index out of range for digital information encoded in XSig format.</exception>
         public static byte[] GetBytes(int index, bool value)
         {
-            return new XSigDigitalToken(index, value).GetBytes();
+            return GetBytes(index, 0, value);
+        }
+
+        /// <summary>
+        /// Get bytes for a single digital signal.
+        /// </summary>
+        /// <param name="index">1-based digital index</param>
+        /// <param name="offset">Index offset.</param>
+        /// <param name="value">Digital data to be encoded</param>
+        /// <returns>Bytes in XSig format for digtial information.</returns>
+        /// <exception cref="ArgumentException">Index out of range for digital information encoded in XSig format.</exception>
+        public static byte[] GetBytes(int index, int offset, bool value)
+        {
+            return new XSigDigitalToken(index + offset, value).GetBytes();
         }
 
         /// <summary>
@@ -65,10 +78,22 @@ namespace XSigUtilityLibrary.Intersystem
         /// <returns>Byte sequence in XSig format for digital signal information.</returns>
         public static byte[] GetBytes(int startIndex, bool[] values)
         {
+            return GetBytes(startIndex, 0, values);
+        }
+
+        /// <summary>
+        /// Get byte sequence for multiple digital signals.
+        /// </summary>
+        /// <param name="startIndex">Starting index of the sequence.</param>
+        /// <param name="offset">Index offset.</param>
+        /// <param name="values">Digital signal value array.</param>
+        /// <returns>Byte sequence in XSig format for digital signal information.</returns>
+        public static byte[] GetBytes(int startIndex, int offset, bool[] values)
+        {
             // Digital XSig data is 2 bytes per value
             const int fixedLength = 2;
             var bytes = new byte[values.Length * fixedLength];
-            for (var i = 0; i < values.Length; i++) Buffer.BlockCopy(GetBytes(startIndex++, values[i]), 0, bytes, i * fixedLength, fixedLength);
+            for (var i = 0; i < values.Length; i++) Buffer.BlockCopy(GetBytes(startIndex++, offset, values[i]), 0, bytes, i * fixedLength, fixedLength);
             return bytes;
         }
 
@@ -81,7 +106,20 @@ namespace XSigUtilityLibrary.Intersystem
         /// <exception cref="ArgumentException">Index out of range for analog information encoded in XSig format.</exception>
         public static byte[] GetBytes(int index, ushort value)
         {
-            return new XSigAnalogToken(index, value).GetBytes();
+            return GetBytes(index, 0, value);
+        }
+
+        /// <summary>
+        /// Get bytes for a single analog signal.
+        /// </summary>
+        /// <param name="index">1-based analog index</param>
+        /// <param name="offset">Index offset.</param>
+        /// <param name="value">Analog data to be encoded</param>
+        /// <returns>Bytes in XSig format for analog signal information.</returns>
+        /// <exception cref="ArgumentException">Index out of range for analog information encoded in XSig format.</exception>
+        public static byte[] GetBytes(int index, int offset, ushort value)
+        {
+            return new XSigAnalogToken(index + offset, value).GetBytes();
         }
 
         /// <summary>
@@ -92,10 +130,24 @@ namespace XSigUtilityLibrary.Intersystem
         /// <returns>Byte sequence in XSig format for analog signal information.</returns>
         public static byte[] GetBytes(int startIndex, ushort[] values)
         {
+            return GetBytes(startIndex, 0, values);
+        }
+
+        /// <summary>
+        /// Get byte sequence for multiple analog signals.
+        /// </summary>
+        /// <param name="startIndex">Starting index of the sequence.</param>
+        /// <param name="offset">Index offset.</param>
+        /// <param name="values">Analog signal value array.</param>
+        /// <returns>Byte sequence in XSig format for analog signal information.</returns>
+        public static byte[] GetBytes(int startIndex, int offset, ushort[] values)
+        {
             // Analog XSig data is 4 bytes per value
             const int fixedLength = 4;
             var bytes = new byte[values.Length * fixedLength];
-            for (var i = 0; i < values.Length; i++) Buffer.BlockCopy(GetBytes(startIndex++, values[i]), 0, bytes, i * fixedLength, fixedLength);
+            for (var i = 0; i < values.Length; i++) {
+                Buffer.BlockCopy(GetBytes(startIndex++, offset, values[i]), 0, bytes, i * fixedLength, fixedLength);
+            }
             return bytes;
         }
 
@@ -108,7 +160,20 @@ namespace XSigUtilityLibrary.Intersystem
         /// <exception cref="ArgumentException">Index out of range for serial information encoded in XSig format.</exception>
         public static byte[] GetBytes(int index, string value)
         {
-            return new XSigSerialToken(index, value).GetBytes();
+            return GetBytes(index, 0, value);
+        }
+
+        /// <summary>
+        /// Get bytes for a single serial signal.
+        /// </summary>
+        /// <param name="index">1-based serial index</param>
+        /// <param name="offset">Index offset.</param>
+        /// <param name="value">Serial data to be encoded</param>
+        /// <returns>Bytes in XSig format for serial signal information.</returns>
+        /// <exception cref="ArgumentException">Index out of range for serial information encoded in XSig format.</exception>
+        public static byte[] GetBytes(int index, int offset, string value)
+        {
+            return new XSigSerialToken(index + offset, value).GetBytes();
         }
 
         /// <summary>
@@ -119,13 +184,25 @@ namespace XSigUtilityLibrary.Intersystem
         /// <returns>Byte sequence in XSig format for serial signal information.</returns>
         public static byte[] GetBytes(int startIndex, string[] values)
         {
+            return GetBytes(startIndex, 0, values);
+        }
+
+        /// <summary>
+        /// Get byte sequence for multiple serial signals.
+        /// </summary>
+        /// <param name="startIndex">Starting index of the sequence.</param>
+        /// <param name="offset">Index offset.</param>
+        /// <param name="values">Serial signal value array.</param>
+        /// <returns>Byte sequence in XSig format for serial signal information.</returns>
+        public static byte[] GetBytes(int startIndex, int offset, string[] values)
+        {
             // Serial XSig data is not fixed-length like the other formats
-            var offset = 0;
+            var dstOffset = 0;
             var bytes = new byte[values.Sum(v => v.Length + 3)];
             for (var i = 0; i < values.Length; i++) {
-                var data = GetBytes(startIndex++, values[i]);
-                Buffer.BlockCopy(data, 0, bytes, offset, data.Length);
-                offset += data.Length;
+                var data = GetBytes(startIndex++, offset, values[i]);
+                Buffer.BlockCopy(data, 0, bytes, dstOffset, data.Length);
+                dstOffset += data.Length;
             }
             return bytes;
         }
