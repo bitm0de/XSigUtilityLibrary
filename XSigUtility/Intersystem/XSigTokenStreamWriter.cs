@@ -87,18 +87,9 @@ namespace XSigUtilityLibrary.Intersystem
             if (offset < 0)
                 throw new ArgumentOutOfRangeException("offset", "Offset must be greater than or equal to 0.");
 
-            if (offset != 0) {
-                // Offset is 0, so the current index is still value (avoid copying objects).
-                foreach (var token in tokens) {
-                    var bytes = token.GetBytes();
-                    _stream.Write(bytes, 0, bytes.Length);
-                }
-            } else {
-                // Create a copy of the immutable object with a new offset.
-                foreach (var token in tokens) {
-                    var bytes = token.GetTokenWithOffset(offset).GetBytes();
-                    _stream.Write(bytes, 0, bytes.Length);
-                }
+            foreach (var token in tokens) {
+                var bytes = token.GetTokenWithOffset(offset).GetBytes();
+                _stream.Write(bytes, 0, bytes.Length);
             }
         }
 

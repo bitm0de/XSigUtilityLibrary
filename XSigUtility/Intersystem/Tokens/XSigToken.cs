@@ -1,3 +1,5 @@
+using System;
+
 namespace XSigUtilityLibrary.Intersystem.Tokens
 {
     public abstract class XSigToken
@@ -22,6 +24,13 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         public abstract XSigTokenType TokenType { get; }
 
         public abstract byte[] GetBytes();
-        public abstract XSigToken GetTokenWithOffset(int offset);
+
+        public virtual XSigToken GetTokenWithOffset(int offset)
+        {
+            if (offset == 0)
+                return this;
+            
+            throw new ArgumentException("Offset cannot be non-zero.");
+        }
     }
 }
