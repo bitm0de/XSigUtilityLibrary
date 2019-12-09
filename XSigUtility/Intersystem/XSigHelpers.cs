@@ -2,6 +2,20 @@ using System;
 using System.Linq;
 using XSigUtilityLibrary.Intersystem.Tokens;
 
+/*
+    Digital (2 bytes)
+        10C##### 0####### (mask = 11000000_10000000b -> 0xC080)
+
+    Analog (4 bytes)
+        11aa0### 0####### (mask = 11001000_10000000b -> 0xC880)
+        0aaaaaaa 0aaaaaaa
+
+    Serial (Variable length)
+        11001### 0####### (mask = 11111000_10000000b -> 0xF880)
+        dddddddd ........ <- up to 252 bytes or serial 'd'ata (255 - 3)
+        11111111 <- denotes end of data
+ */
+
 namespace XSigUtilityLibrary.Intersystem
 {
     /// <summary>

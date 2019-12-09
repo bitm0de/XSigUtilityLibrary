@@ -37,6 +37,11 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
             return xsig;
         }
 
+        public override XSigToken GetTokenWithOffset(int offset)
+        {
+            return new XSigSerialToken(Index + offset, Value);
+        }
+
         public override string ToString()
         {
             return "\"" + Value + "\"";

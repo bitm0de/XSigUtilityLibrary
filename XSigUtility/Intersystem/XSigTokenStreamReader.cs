@@ -4,20 +4,6 @@ using XSigUtilityLibrary.Intersystem.Tokens;
 
 namespace XSigUtilityLibrary.Intersystem
 {
-    /*
-        Digital (2 bytes)
-            10C##### 0####### (mask = 11000000_10000000b -> 0xC080)
-
-        Analog (4 bytes)
-            11aa0### 0####### (mask = 11001000_10000000b -> 0xC880)
-            0aaaaaaa 0aaaaaaa
-
-        Serial (Variable length)
-            11001### 0####### (mask = 11111000_10000000b -> 0xF880)
-            dddddddd ........ <- up to 252 bytes or serial 'd'ata (255 - 3)
-            11111111 <- denotes end of data
-     */
-
     /// <summary>
     /// XSigToken stream reader.
     /// </summary>
@@ -65,6 +51,20 @@ namespace XSigUtilityLibrary.Intersystem
         /// <returns>XSigToken</returns>
         public XSigToken ReadXSigToken()
         {
+            return ReadXSigToken(0);
+        }
+        
+        /// <summary>
+        /// Read XSig token from the stream.
+        /// </summary>
+        /// <param name="offset">XSig index offset.</param>
+        /// <returns>XSigToken</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Offset is less than 0.</exception>
+        public XSigToken ReadXSigToken(int offset)
+        {
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException("offset", "Offset must be greater than or equal to 0.");
+            
             ushort prefix;
             if (!TryReadUInt16BE(_stream, out prefix))
                 return null;

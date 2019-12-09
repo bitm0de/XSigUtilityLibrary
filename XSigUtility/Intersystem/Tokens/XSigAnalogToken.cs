@@ -34,6 +34,11 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
             };
         }
 
+        public override XSigToken GetTokenWithOffset(int offset)
+        {
+            return new XSigAnalogToken(Index + offset, Value);
+        }
+
         public override string ToString()
         {
             return "0x" + Value.ToString("X4");

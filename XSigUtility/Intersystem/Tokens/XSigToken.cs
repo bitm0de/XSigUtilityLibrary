@@ -22,5 +22,6 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         public abstract XSigTokenType TokenType { get; }
 
         public abstract byte[] GetBytes();
+        public abstract XSigToken GetTokenWithOffset(int offset);
     }
 }

@@ -32,6 +32,11 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
             };
         }
 
+        public override XSigToken GetTokenWithOffset(int offset)
+        {
+            return new XSigDigitalToken(Index + offset, Value);
+        }
+
         public override string ToString()
         {
             return Value ? "High" : "Low";
