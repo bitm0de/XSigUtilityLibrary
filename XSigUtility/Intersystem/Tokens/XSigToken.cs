@@ -23,6 +23,10 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         /// </summary>
         public abstract XSigTokenType TokenType { get; }
 
+        /// <summary>
+        /// Generates the XSig bytes for the corresponding token.
+        /// </summary>
+        /// <returns>XSig byte array.</returns>
         public abstract byte[] GetBytes();
 
         public virtual XSigToken GetTokenWithOffset(int offset)

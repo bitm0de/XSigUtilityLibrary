@@ -10,6 +10,10 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         public XSigSerialToken(int index, string value)
             : base(index)
         {
+            // 10-bits available for serial encoded data
+            if (index >= 1024 || index < 0)
+                throw new ArgumentOutOfRangeException("index");
+            
             _value = value;
         }
 
@@ -23,10 +27,6 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
 
         public override byte[] GetBytes()
         {
-            // 10-bits available for serial encoded data
-            if (Index >= 1024 || Index < 0)
-                throw new ArgumentException("index");
-
             var serialBytes = Encoding.GetEncoding(28591).GetBytes(Value);
             var xsig = new byte[serialBytes.Length + 3];
             xsig[0] = (byte)(0xC8 | (Index >> 7));

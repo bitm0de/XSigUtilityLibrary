@@ -2,13 +2,17 @@ using System;
 
 namespace XSigUtilityLibrary.Intersystem.Tokens
 {
-    public sealed class XSigAnalogToken : XSigToken
+    public sealed class XSigAnalogToken : XSigToken, IFormattable
     {
         private readonly ushort _value;
 
         public XSigAnalogToken(int index, ushort value)
             : base(index)
         {
+            // 10-bits available for analog encoded data
+            if (index >= 1024 || index < 0)
+                throw new ArgumentOutOfRangeException("index");
+            
             _value = value;
         }
 
@@ -22,10 +26,6 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
 
         public override byte[] GetBytes()
         {
-            // 10-bits available for analog encoded data
-            if (Index >= 1024 || Index < 0)
-                throw new ArgumentException("index");
-
             return new[] {
                 (byte)(0xC0 | ((Value & 0xC000) >> 10) | (Index >> 7)),
                 (byte)((Index - 1) & 0x7F),
@@ -43,6 +43,11 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         public override string ToString()
         {
             return "0x" + Value.ToString("X4");
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return Value.ToString(format, formatProvider);
         }
     }
 }

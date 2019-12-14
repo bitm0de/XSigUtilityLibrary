@@ -51,7 +51,6 @@ namespace XSigUtilityLibrary.Intersystem
         /// <param name="index">1-based digital index</param>
         /// <param name="value">Digital data to be encoded</param>
         /// <returns>Bytes in XSig format for digtial information.</returns>
-        /// <exception cref="ArgumentException">Index out of range for digital information encoded in XSig format.</exception>
         public static byte[] GetBytes(int index, bool value)
         {
             return GetBytes(index, 0, value);
@@ -64,7 +63,6 @@ namespace XSigUtilityLibrary.Intersystem
         /// <param name="offset">Index offset.</param>
         /// <param name="value">Digital data to be encoded</param>
         /// <returns>Bytes in XSig format for digtial information.</returns>
-        /// <exception cref="ArgumentException">Index out of range for digital information encoded in XSig format.</exception>
         public static byte[] GetBytes(int index, int offset, bool value)
         {
             return new XSigDigitalToken(index + offset, value).GetBytes();
@@ -103,7 +101,6 @@ namespace XSigUtilityLibrary.Intersystem
         /// <param name="index">1-based analog index</param>
         /// <param name="value">Analog data to be encoded</param>
         /// <returns>Bytes in XSig format for analog signal information.</returns>
-        /// <exception cref="ArgumentException">Index out of range for analog information encoded in XSig format.</exception>
         public static byte[] GetBytes(int index, ushort value)
         {
             return GetBytes(index, 0, value);
@@ -116,7 +113,6 @@ namespace XSigUtilityLibrary.Intersystem
         /// <param name="offset">Index offset.</param>
         /// <param name="value">Analog data to be encoded</param>
         /// <returns>Bytes in XSig format for analog signal information.</returns>
-        /// <exception cref="ArgumentException">Index out of range for analog information encoded in XSig format.</exception>
         public static byte[] GetBytes(int index, int offset, ushort value)
         {
             return new XSigAnalogToken(index + offset, value).GetBytes();
@@ -157,7 +153,6 @@ namespace XSigUtilityLibrary.Intersystem
         /// <param name="index">1-based serial index</param>
         /// <param name="value">Serial data to be encoded</param>
         /// <returns>Bytes in XSig format for serial signal information.</returns>
-        /// <exception cref="ArgumentException">Index out of range for serial information encoded in XSig format.</exception>
         public static byte[] GetBytes(int index, string value)
         {
             return GetBytes(index, 0, value);
@@ -170,7 +165,6 @@ namespace XSigUtilityLibrary.Intersystem
         /// <param name="offset">Index offset.</param>
         /// <param name="value">Serial data to be encoded</param>
         /// <returns>Bytes in XSig format for serial signal information.</returns>
-        /// <exception cref="ArgumentException">Index out of range for serial information encoded in XSig format.</exception>
         public static byte[] GetBytes(int index, int offset, string value)
         {
             return new XSigSerialToken(index + offset, value).GetBytes();
