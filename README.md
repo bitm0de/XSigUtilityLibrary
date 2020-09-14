@@ -25,9 +25,9 @@ using (var memoryStream = new MemoryStream())
 {
     using (var tokenWriter = new XSigTokenStreamWriter(memoryStream, true))
         tokenWriter.WriteXSigData(new XSigToken[] {
-        new XSigAnalogToken(1, 0x1234),
-        new XSigSerialToken(2, "Hello world!"),
-        new XSigDigitalToken(3, true),
+        new XSigAnalogToken(1, 0x1234),         // aout1
+        new XSigSerialToken(2, "Hello world!"), // aout2
+        new XSigDigitalToken(3, true),          // dig_out1
     });
     byte[] bytes = memoryStream.ToArray();
     return Encoding.GetEncoding(28591).GetString(bytes, 0, bytes.Length);
