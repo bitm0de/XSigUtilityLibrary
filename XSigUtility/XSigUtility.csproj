@@ -71,7 +71,6 @@
     <Compile Include="Intersystem\XSigTokenStreamReader.cs" />
     <Compile Include="Intersystem\XSigTokenStreamWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <PropertyGroup>
