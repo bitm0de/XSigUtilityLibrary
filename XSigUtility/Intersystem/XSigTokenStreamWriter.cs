@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Crestron.SimplSharp.CrestronIO;
 using XSigUtilityLibrary.Intersystem.Interfaces;
@@ -69,7 +70,16 @@ namespace XSigUtilityLibrary.Intersystem
         }
 
         /// <summary>
-        /// Write an enumerable collection of XSigToken's to the stream.
+        /// Writes an array of XSigTokens to the stream.
+        /// </summary>
+        /// <param name="tokens">XSigToken objects.</param>
+        public void WriteXSigData(XSigToken[] tokens)
+        {
+            WriteXSigData(tokens.AsEnumerable());
+        }
+
+        /// <summary>
+        /// Write an enumerable collection of XSigTokens to the stream.
         /// </summary>
         /// <param name="tokens">XSigToken objects.</param>
         public void WriteXSigData(IEnumerable<XSigToken> tokens)
@@ -78,7 +88,7 @@ namespace XSigUtilityLibrary.Intersystem
         }
 
         /// <summary>
-        /// Write an enumerable collection of XSigToken's to the stream.
+        /// Write an enumerable collection of XSigTokens to the stream.
         /// </summary>
         /// <param name="tokens">XSigToken objects.</param>
         /// <param name="offset">Index offset for each XSigToken.</param>
