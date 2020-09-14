@@ -13,14 +13,27 @@ namespace XSigUtilityLibrary.Intersystem
     public sealed class XSigTokenStreamWriter : IDisposable
     {
         private readonly Stream _stream;
+        private readonly bool _leaveOpen;
 
+        /// <inheritdoc />
         /// <summary>
         /// XSigToken stream writer constructor.
         /// </summary>
         /// <param name="stream">Input stream to write to.</param>
+        /// <exception cref="T:System.ArgumentNullException">Stream is null.</exception>
+        /// <exception cref="T:System.ArgumentException">Stream cannot be written to.</exception>
+        public XSigTokenStreamWriter(Stream stream)
+            : this(stream, false)
+        { }
+        
+        /// <summary>
+        /// XSigToken stream writer constructor.
+        /// </summary>
+        /// <param name="stream">Input stream to write to.</param>
+        /// <param name="leaveOpen">Determines whether to leave the stream open or not.</param>
         /// <exception cref="ArgumentNullException">Stream is null.</exception>
         /// <exception cref="ArgumentException">Stream cannot be written to.</exception>
-        public XSigTokenStreamWriter(Stream stream)
+        public XSigTokenStreamWriter(Stream stream, bool leaveOpen)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
@@ -28,6 +41,7 @@ namespace XSigUtilityLibrary.Intersystem
                 throw new ArgumentException("The specified stream cannot be written to.");
 
             _stream = stream;
+            _leaveOpen = leaveOpen;
         }
 
         /// <summary>
@@ -105,7 +119,8 @@ namespace XSigUtilityLibrary.Intersystem
 
         public void Dispose()
         {
-            _stream.Dispose();
+            if (!_leaveOpen)
+                _stream.Dispose();
         }
     }
 }
