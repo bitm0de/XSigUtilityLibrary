@@ -45,7 +45,7 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
 
         public override string ToString()
         {
-            return "\"" + Value + "\"";
+            return Index + " = \"" + Value + "\"";
         }
     }
 }

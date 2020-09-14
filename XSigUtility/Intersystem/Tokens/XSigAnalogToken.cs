@@ -42,7 +42,7 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
 
         public override string ToString()
         {
-            return "0x" + Value.ToString("X4");
+            return Index + " = 0x" + Value.ToString("X4");
         }
 
         public string ToString(string format, IFormatProvider formatProvider)

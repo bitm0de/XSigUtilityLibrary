@@ -72,6 +72,9 @@
     <Compile Include="Intersystem\XSigTokenStreamWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\ControlSystem.cfg" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>rem  S# preparation will execute after these operations</PostBuildEvent>

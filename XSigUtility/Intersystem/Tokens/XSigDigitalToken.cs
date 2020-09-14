@@ -40,7 +40,7 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
 
         public override string ToString()
         {
-            return Value ? "High" : "Low";
+            return Index + " = " + (Value ? "High" : "Low");
         }
 
         public string ToString(IFormatProvider formatProvider)
