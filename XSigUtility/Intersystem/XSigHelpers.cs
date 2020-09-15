@@ -50,27 +50,27 @@ namespace XSigUtilityLibrary.Intersystem
         /// <summary>
         /// Get bytes for an IXSigStateResolver object.
         /// </summary>
-        /// <param name="xSigStateResolver">XSig state resolver.</param>
+        /// <param name="ixSigSerialization">XSig state resolver.</param>
         /// <returns>Bytes in XSig format for each token within the state representation.</returns>
-        public static byte[] GetBytes(IXSigStateResolver xSigStateResolver)
+        public static byte[] GetBytes(IXSigSerialization ixSigSerialization)
         {
-            return GetBytes(xSigStateResolver, 0);
+            return GetBytes(ixSigSerialization, 0);
         }
 
         /// <summary>
         /// Get bytes for an IXSigStateResolver object, with a specified offset.
         /// </summary>
-        /// <param name="xSigStateResolver">XSig state resolver.</param>
+        /// <param name="ixSigSerialization">XSig state resolver.</param>
         /// <param name="offset">Offset to which the data will be aligned.</param>
         /// <returns>Bytes in XSig format for each token within the state representation.</returns>
-        public static byte[] GetBytes(IXSigStateResolver xSigStateResolver, int offset)
+        public static byte[] GetBytes(IXSigSerialization ixSigSerialization, int offset)
         {
-            var tokens = xSigStateResolver.GetXSigState();
+            var tokens = ixSigSerialization.Serialize();
             if (tokens == null) return new byte[0];
             using (var memoryStream = new MemoryStream())
             {
                 using (var tokenWriter = new XSigTokenStreamWriter(memoryStream))
-                    tokenWriter.WriteXSigData(xSigStateResolver, offset);
+                    tokenWriter.WriteXSigData(ixSigSerialization, offset);
 
                 return memoryStream.ToArray();
             }
@@ -124,7 +124,7 @@ namespace XSigUtilityLibrary.Intersystem
             var bytes = new byte[values.Length * fixedLength];
             for (var i = 0; i < values.Length; i++)
                 Buffer.BlockCopy(GetBytes(startIndex++, offset, values[i]), 0, bytes, i * fixedLength, fixedLength);
-            
+
             return bytes;
         }
 

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Crestron.SimplSharp.CrestronIO;
+using XSigUtilityLibrary.Intersystem.Interfaces;
 using XSigUtilityLibrary.Intersystem.Tokens;
 
 namespace XSigUtilityLibrary.Intersystem
@@ -20,9 +22,8 @@ namespace XSigUtilityLibrary.Intersystem
         /// <exception cref="T:System.ArgumentNullException">Stream is null.</exception>
         /// <exception cref="T:System.ArgumentException">Stream cannot be read from.</exception>
         public XSigTokenStreamReader(Stream stream)
-            : this(stream, false)
-        { }
-        
+            : this(stream, false) { }
+
         /// <summary>
         /// XSigToken stream reader constructor.
         /// </summary>
@@ -63,42 +64,33 @@ namespace XSigUtilityLibrary.Intersystem
         /// Read XSig token from the stream.
         /// </summary>
         /// <returns>XSigToken</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Offset is less than 0.</exception>
         public XSigToken ReadXSigToken()
         {
-            return ReadXSigToken(0);
-        }
-        
-        /// <summary>
-        /// Read XSig token from the stream.
-        /// </summary>
-        /// <param name="offset">XSig index offset.</param>
-        /// <returns>XSigToken</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Offset is less than 0.</exception>
-        public XSigToken ReadXSigToken(int offset)
-        {
-            if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset", "Offset must be greater than or equal to 0.");
-            
             ushort prefix;
             if (!TryReadUInt16BE(_stream, out prefix))
                 return null;
 
-            if ((prefix & 0xF880) == 0xC800) { // Serial data
+            if ((prefix & 0xF880) == 0xC800) // Serial data
+            {
                 var index = ((prefix & 0x0700) >> 1) | (prefix & 0x7F);
                 var n = 0;
                 const int maxSerialDataLength = 252;
                 var chars = new char[maxSerialDataLength];
                 int ch;
-                while ((ch = _stream.ReadByte()) != 0xFF) {
+                while ((ch = _stream.ReadByte()) != 0xFF)
+                {
                     if (ch == -1) // Reached end of stream without end of data marker
                         return null;
+                    
                     chars[n++] = (char)ch;
                 }
 
                 return new XSigSerialToken((ushort)(index + 1), new string(chars, 0, n));
             }
 
-            if ((prefix & 0xC880) == 0xC000) { // Analog data
+            if ((prefix & 0xC880) == 0xC000) // Analog data
+            {
                 ushort data;
                 if (!TryReadUInt16BE(_stream, out data))
                     return null;
@@ -108,7 +100,8 @@ namespace XSigUtilityLibrary.Intersystem
                 return new XSigAnalogToken((ushort)(index + 1), (ushort)value);
             }
 
-            if ((prefix & 0xC080) == 0x8000) { // Digital data
+            if ((prefix & 0xC080) == 0x8000) // Digital data
+            {
                 var index = ((prefix & 0x1F00) >> 1) | (prefix & 0x7F);
                 var value = (prefix & 0x2000) == 0;
                 return new XSigDigitalToken((ushort)(index + 1), value);
@@ -117,6 +110,34 @@ namespace XSigUtilityLibrary.Intersystem
             return null;
         }
 
+        /// <summary>
+        /// Reads all available XSig tokens from the stream.
+        /// </summary>
+        /// <returns>XSigToken collection.</returns>
+        public IEnumerable<XSigToken> ReadAllXSigTokens()
+        {
+            var tokens = new List<XSigToken>();
+            XSigToken token;
+            while ((token = ReadXSigToken()) != null)
+                tokens.Add(token);
+
+            return tokens;
+        }
+
+        /// <summary>
+        /// Attempts to deserialize all XSig data within the stream from the current position.
+        /// </summary>
+        /// <typeparam name="T">Type to deserialize the information to.</typeparam>
+        /// <returns>Deserialized object.</returns>
+        public T DeserializeStream<T>()
+            where T : IXSigSerialization, new()
+        {
+            return new T().Deserialize<T>(ReadAllXSigTokens());
+        }
+
+        /// <summary>
+        /// Disposes of the internal stream if specified to not leave open.
+        /// </summary>
         public void Dispose()
         {
             if (!_leaveOpen)

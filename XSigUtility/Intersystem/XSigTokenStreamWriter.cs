@@ -23,9 +23,8 @@ namespace XSigUtilityLibrary.Intersystem
         /// <exception cref="T:System.ArgumentNullException">Stream is null.</exception>
         /// <exception cref="T:System.ArgumentException">Stream cannot be written to.</exception>
         public XSigTokenStreamWriter(Stream stream)
-            : this(stream, false)
-        { }
-        
+            : this(stream, false) { }
+
         /// <summary>
         /// XSigToken stream writer constructor.
         /// </summary>
@@ -47,23 +46,23 @@ namespace XSigUtilityLibrary.Intersystem
         /// <summary>
         /// Write XSig data gathered from an IXSigStateResolver to the stream.
         /// </summary>
-        /// <param name="xSigStateResolver">IXSigStateResolver object.</param>
-        public void WriteXSigData(IXSigStateResolver xSigStateResolver)
+        /// <param name="ixSigSerialization">IXSigStateResolver object.</param>
+        public void WriteXSigData(IXSigSerialization ixSigSerialization)
         {
-            WriteXSigData(xSigStateResolver, 0);
+            WriteXSigData(ixSigSerialization, 0);
         }
 
         /// <summary>
         /// Write XSig data gathered from an IXSigStateResolver to the stream.
         /// </summary>
-        /// <param name="xSigStateResolver">IXSigStateResolver object.</param>
+        /// <param name="ixSigSerialization">IXSigStateResolver object.</param>
         /// <param name="offset">Index offset for each XSigToken.</param>
-        public void WriteXSigData(IXSigStateResolver xSigStateResolver, int offset)
+        public void WriteXSigData(IXSigSerialization ixSigSerialization, int offset)
         {
-            if (xSigStateResolver == null)
-                throw new ArgumentNullException("xSigStateResolver");
-            
-            var tokens = xSigStateResolver.GetXSigState();
+            if (ixSigSerialization == null)
+                throw new ArgumentNullException("ixSigSerialization");
+
+            var tokens = ixSigSerialization.Serialize();
             WriteXSigData(tokens, offset);
         }
 
@@ -83,7 +82,7 @@ namespace XSigUtilityLibrary.Intersystem
         /// <param name="offset">Index offset for each XSigToken.</param>
         public void WriteXSigData(XSigToken token, int offset)
         {
-            WriteXSigData(new [] { token }, offset);
+            WriteXSigData(new[] { token }, offset);
         }
 
         /// <summary>
@@ -125,6 +124,9 @@ namespace XSigUtilityLibrary.Intersystem
             }
         }
 
+        /// <summary>
+        /// Disposes of the internal stream if specified to not leave open.
+        /// </summary>
         public void Dispose()
         {
             if (!_leaveOpen)

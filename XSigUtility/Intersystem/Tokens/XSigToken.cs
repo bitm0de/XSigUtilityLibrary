@@ -1,11 +1,16 @@
-using System;
-
 namespace XSigUtilityLibrary.Intersystem.Tokens
 {
+    /// <summary>
+    /// Represents the base class for all XSig datatypes.
+    /// </summary>
     public abstract class XSigToken
     {
         private readonly int _index;
 
+        /// <summary>
+        /// Constructs an XSigToken with the specified index.
+        /// </summary>
+        /// <param name="index">Index for the data.</param>
         protected XSigToken(int index)
         {
             _index = index;
@@ -14,7 +19,8 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         /// <summary>
         /// XSig 1-based index.
         /// </summary>
-        public int Index {
+        public int Index
+        {
             get { return _index; }
         }
 
@@ -29,6 +35,11 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         /// <returns>XSig byte array.</returns>
         public abstract byte[] GetBytes();
 
+        /// <summary>
+        /// Returns a new token if necessary with an updated index based on the specified offset.
+        /// </summary>
+        /// <param name="offset">Offset to adjust the index with.</param>
+        /// <returns>XSigToken</returns>
         public abstract XSigToken GetTokenWithOffset(int offset);
     }
 }

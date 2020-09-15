@@ -12,15 +12,17 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
             // 10-bits available for analog encoded data
             if (index >= 1024 || index < 0)
                 throw new ArgumentOutOfRangeException("index");
-            
+
             _value = value;
         }
 
-        public ushort Value {
+        public ushort Value
+        {
             get { return _value; }
         }
 
-        public override XSigTokenType TokenType {
+        public override XSigTokenType TokenType
+        {
             get { return XSigTokenType.Analog; }
         }
 

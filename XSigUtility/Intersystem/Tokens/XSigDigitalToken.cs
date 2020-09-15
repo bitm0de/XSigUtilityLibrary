@@ -12,15 +12,17 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
             // 12-bits available for digital encoded data
             if (index >= 4096 || index < 0)
                 throw new ArgumentOutOfRangeException("index");
-            
+
             _value = value;
         }
 
-        public bool Value {
+        public bool Value
+        {
             get { return _value; }
         }
 
-        public override XSigTokenType TokenType {
+        public override XSigTokenType TokenType
+        {
             get { return XSigTokenType.Digital; }
         }
 

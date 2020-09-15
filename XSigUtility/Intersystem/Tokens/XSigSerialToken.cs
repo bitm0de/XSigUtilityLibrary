@@ -13,15 +13,17 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
             // 10-bits available for serial encoded data
             if (index >= 1024 || index < 0)
                 throw new ArgumentOutOfRangeException("index");
-            
+
             _value = value;
         }
 
-        public string Value {
+        public string Value
+        {
             get { return _value; }
         }
 
-        public override XSigTokenType TokenType {
+        public override XSigTokenType TokenType
+        {
             get { return XSigTokenType.Serial; }
         }
 
