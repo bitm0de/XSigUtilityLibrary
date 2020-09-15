@@ -85,6 +85,17 @@ public class StateObject : IXSigSerialization
 }
 ```
 
+#### Serialization:
+Writing an instance of an object which implements the `IXSigSerialization` interface (i.e. StateObject above):
+```cs
+using (var memoryStream = new MemoryStream())
+{
+    using (var tokenWriter = new XSigTokenStreamWriter(memoryStream, true))
+        tokenWriter.WriteXSigData(stateObject);
+}
+```
+
+
 >Note: The indexes are 1-based, and are set based on the output signal index. For instance, if nothing has been expanded on an XSIG symbol in SIMPL Windows where you have aout1 and dig_out1, aout1 is index 1 and dig_out1 is index 2.
 
 >Important: Always ensure that your signal alignment matches your code to mitigate error log spam. If your datatypes and data don't match the symbol defined in your SIMPL Windows program, your logfile will be full of "Signal Mismatch in receive of Intersystem Communications" messages.
