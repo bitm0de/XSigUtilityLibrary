@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Crestron.SimplSharp.CrestronIO;
-using XSigUtilityLibrary.Intersystem.Interfaces;
+using XSigUtilityLibrary.Intersystem.Serialization;
 using XSigUtilityLibrary.Intersystem.Tokens;
 
 namespace XSigUtilityLibrary.Intersystem

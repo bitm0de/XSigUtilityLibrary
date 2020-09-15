@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharp.CrestronIO;
-using XSigUtilityLibrary.Intersystem.Interfaces;
+using XSigUtilityLibrary.Intersystem.Serialization;
 using XSigUtilityLibrary.Intersystem.Tokens;
 
 namespace XSigUtilityLibrary.Intersystem
@@ -130,7 +130,7 @@ namespace XSigUtilityLibrary.Intersystem
         /// <typeparam name="T">Type to deserialize the information to.</typeparam>
         /// <returns>Deserialized object.</returns>
         public T DeserializeStream<T>()
-            where T : IXSigSerialization, new()
+            where T : class, IXSigSerialization, new()
         {
             return new T().Deserialize<T>(ReadAllXSigTokens());
         }

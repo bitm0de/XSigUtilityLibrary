@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using XSigUtilityLibrary.Intersystem.Tokens;
 
-namespace XSigUtilityLibrary.Intersystem.Interfaces
+namespace XSigUtilityLibrary.Intersystem.Serialization
 {
     /// <summary>
     /// Interface to determine XSig serialization for an object.
@@ -9,6 +9,6 @@ namespace XSigUtilityLibrary.Intersystem.Interfaces
     public interface IXSigSerialization
     {
         IEnumerable<XSigToken> Serialize();
-        T Deserialize<T>(IEnumerable<XSigToken> tokens) where T : IXSigSerialization;
+        T Deserialize<T>(IEnumerable<XSigToken> tokens) where T : class, IXSigSerialization;
     }
 }
