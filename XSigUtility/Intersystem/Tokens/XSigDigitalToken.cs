@@ -34,7 +34,7 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
 
         public override XSigToken GetTokenWithOffset(int offset)
         {
-            if (offset == 0) return base.GetTokenWithOffset(offset);
+            if (offset == 0) return this;
             return new XSigDigitalToken(Index + offset, Value);
         }
 

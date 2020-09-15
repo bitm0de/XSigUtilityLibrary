@@ -29,12 +29,6 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         /// <returns>XSig byte array.</returns>
         public abstract byte[] GetBytes();
 
-        public virtual XSigToken GetTokenWithOffset(int offset)
-        {
-            if (offset == 0)
-                return this;
-            
-            throw new ArgumentException("Offset cannot be non-zero.");
-        }
+        public abstract XSigToken GetTokenWithOffset(int offset);
     }
 }

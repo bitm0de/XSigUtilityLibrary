@@ -60,6 +60,9 @@ namespace XSigUtilityLibrary.Intersystem
         /// <param name="offset">Index offset for each XSigToken.</param>
         public void WriteXSigData(IXSigStateResolver xSigStateResolver, int offset)
         {
+            if (xSigStateResolver == null)
+                throw new ArgumentNullException("xSigStateResolver");
+            
             var tokens = xSigStateResolver.GetXSigState();
             WriteXSigData(tokens, offset);
         }
@@ -111,9 +114,14 @@ namespace XSigUtilityLibrary.Intersystem
             if (offset < 0)
                 throw new ArgumentOutOfRangeException("offset", "Offset must be greater than or equal to 0.");
 
-            foreach (var token in tokens) {
-                var bytes = token.GetTokenWithOffset(offset).GetBytes();
-                _stream.Write(bytes, 0, bytes.Length);
+            if (tokens != null)
+            {
+                foreach (var token in tokens)
+                {
+                    if (token == null) continue;
+                    var bytes = token.GetTokenWithOffset(offset).GetBytes();
+                    _stream.Write(bytes, 0, bytes.Length);
+                }
             }
         }
 

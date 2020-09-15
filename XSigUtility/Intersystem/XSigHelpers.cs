@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using Crestron.SimplSharp.CrestronIO;
+using XSigUtilityLibrary.Intersystem.Interfaces;
 using XSigUtilityLibrary.Intersystem.Tokens;
 
 /*
@@ -12,9 +14,9 @@ using XSigUtilityLibrary.Intersystem.Tokens;
 
     Serial (Variable length)
         11001### 0####### (mask = 11111000_10000000b -> 0xF880)
-        dddddddd ........ <- up to 252 bytes or serial 'd'ata (255 - 3)
+        dddddddd ........ <- up to 252 bytes of serial data (255 - 3)
         11111111 <- denotes end of data
- */
+*/
 
 namespace XSigUtilityLibrary.Intersystem
 {
@@ -43,6 +45,35 @@ namespace XSigUtilityLibrary.Intersystem
         public static byte[] SendStatus()
         {
             return new byte[] { 0xFD };
+        }
+
+        /// <summary>
+        /// Get bytes for an IXSigStateResolver object.
+        /// </summary>
+        /// <param name="xSigStateResolver">XSig state resolver.</param>
+        /// <returns>Bytes in XSig format for each token within the state representation.</returns>
+        public static byte[] GetBytes(IXSigStateResolver xSigStateResolver)
+        {
+            return GetBytes(xSigStateResolver, 0);
+        }
+
+        /// <summary>
+        /// Get bytes for an IXSigStateResolver object, with a specified offset.
+        /// </summary>
+        /// <param name="xSigStateResolver">XSig state resolver.</param>
+        /// <param name="offset">Offset to which the data will be aligned.</param>
+        /// <returns>Bytes in XSig format for each token within the state representation.</returns>
+        public static byte[] GetBytes(IXSigStateResolver xSigStateResolver, int offset)
+        {
+            var tokens = xSigStateResolver.GetXSigState();
+            if (tokens == null) return new byte[0];
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var tokenWriter = new XSigTokenStreamWriter(memoryStream))
+                    tokenWriter.WriteXSigData(xSigStateResolver, offset);
+
+                return memoryStream.ToArray();
+            }
         }
 
         /// <summary>
@@ -91,7 +122,9 @@ namespace XSigUtilityLibrary.Intersystem
             // Digital XSig data is 2 bytes per value
             const int fixedLength = 2;
             var bytes = new byte[values.Length * fixedLength];
-            for (var i = 0; i < values.Length; i++) Buffer.BlockCopy(GetBytes(startIndex++, offset, values[i]), 0, bytes, i * fixedLength, fixedLength);
+            for (var i = 0; i < values.Length; i++)
+                Buffer.BlockCopy(GetBytes(startIndex++, offset, values[i]), 0, bytes, i * fixedLength, fixedLength);
+            
             return bytes;
         }
 
@@ -141,9 +174,9 @@ namespace XSigUtilityLibrary.Intersystem
             // Analog XSig data is 4 bytes per value
             const int fixedLength = 4;
             var bytes = new byte[values.Length * fixedLength];
-            for (var i = 0; i < values.Length; i++) {
+            for (var i = 0; i < values.Length; i++)
                 Buffer.BlockCopy(GetBytes(startIndex++, offset, values[i]), 0, bytes, i * fixedLength, fixedLength);
-            }
+
             return bytes;
         }
 
@@ -193,11 +226,13 @@ namespace XSigUtilityLibrary.Intersystem
             // Serial XSig data is not fixed-length like the other formats
             var dstOffset = 0;
             var bytes = new byte[values.Sum(v => v.Length + 3)];
-            for (var i = 0; i < values.Length; i++) {
+            for (var i = 0; i < values.Length; i++)
+            {
                 var data = GetBytes(startIndex++, offset, values[i]);
                 Buffer.BlockCopy(data, 0, bytes, dstOffset, data.Length);
                 dstOffset += data.Length;
             }
+
             return bytes;
         }
     }
