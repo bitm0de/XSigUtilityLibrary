@@ -30,7 +30,7 @@ using (var memoryStream = new MemoryStream())
         new XSigDigitalToken(3, true),          // dig_out1
     });
     byte[] bytes = memoryStream.ToArray();
-    return Encoding.GetEncoding(28591).GetString(bytes, 0, bytes.Length);
+    CrestronConsole.PrintLine(string.Concat(bytes.Select(b => "\\x" + b.ToString("X2")).ToArray());
 }
 ```
 
