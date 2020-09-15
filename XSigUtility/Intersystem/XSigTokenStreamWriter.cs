@@ -46,23 +46,23 @@ namespace XSigUtilityLibrary.Intersystem
         /// <summary>
         /// Write XSig data gathered from an IXSigStateResolver to the stream.
         /// </summary>
-        /// <param name="ixSigSerialization">IXSigStateResolver object.</param>
-        public void WriteXSigData(IXSigSerialization ixSigSerialization)
+        /// <param name="xSigSerialization">IXSigStateResolver object.</param>
+        public void WriteXSigData(IXSigSerialization xSigSerialization)
         {
-            WriteXSigData(ixSigSerialization, 0);
+            WriteXSigData(xSigSerialization, 0);
         }
 
         /// <summary>
         /// Write XSig data gathered from an IXSigStateResolver to the stream.
         /// </summary>
-        /// <param name="ixSigSerialization">IXSigStateResolver object.</param>
+        /// <param name="xSigSerialization">IXSigStateResolver object.</param>
         /// <param name="offset">Index offset for each XSigToken.</param>
-        public void WriteXSigData(IXSigSerialization ixSigSerialization, int offset)
+        public void WriteXSigData(IXSigSerialization xSigSerialization, int offset)
         {
-            if (ixSigSerialization == null)
-                throw new ArgumentNullException("ixSigSerialization");
+            if (xSigSerialization == null)
+                throw new ArgumentNullException("xSigSerialization");
 
-            var tokens = ixSigSerialization.Serialize();
+            var tokens = xSigSerialization.Serialize();
             WriteXSigData(tokens, offset);
         }
 

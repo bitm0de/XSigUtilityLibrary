@@ -50,27 +50,27 @@ namespace XSigUtilityLibrary.Intersystem
         /// <summary>
         /// Get bytes for an IXSigStateResolver object.
         /// </summary>
-        /// <param name="ixSigSerialization">XSig state resolver.</param>
+        /// <param name="xSigSerialization">XSig state resolver.</param>
         /// <returns>Bytes in XSig format for each token within the state representation.</returns>
-        public static byte[] GetBytes(IXSigSerialization ixSigSerialization)
+        public static byte[] GetBytes(IXSigSerialization xSigSerialization)
         {
-            return GetBytes(ixSigSerialization, 0);
+            return GetBytes(xSigSerialization, 0);
         }
 
         /// <summary>
         /// Get bytes for an IXSigStateResolver object, with a specified offset.
         /// </summary>
-        /// <param name="ixSigSerialization">XSig state resolver.</param>
+        /// <param name="xSigSerialization">XSig state resolver.</param>
         /// <param name="offset">Offset to which the data will be aligned.</param>
         /// <returns>Bytes in XSig format for each token within the state representation.</returns>
-        public static byte[] GetBytes(IXSigSerialization ixSigSerialization, int offset)
+        public static byte[] GetBytes(IXSigSerialization xSigSerialization, int offset)
         {
-            var tokens = ixSigSerialization.Serialize();
+            var tokens = xSigSerialization.Serialize();
             if (tokens == null) return new byte[0];
             using (var memoryStream = new MemoryStream())
             {
                 using (var tokenWriter = new XSigTokenStreamWriter(memoryStream))
-                    tokenWriter.WriteXSigData(ixSigSerialization, offset);
+                    tokenWriter.WriteXSigData(xSigSerialization, offset);
 
                 return memoryStream.ToArray();
             }
