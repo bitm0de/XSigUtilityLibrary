@@ -96,6 +96,6 @@ using (var memoryStream = new MemoryStream())
 ```
 
 
->Note: The indexes are 1-based, and are set based on the output signal index. For instance, if nothing has been expanded on an XSIG symbol in SIMPL Windows where you have aout1 and dig_out1, aout1 is index 1 and dig_out1 is index 2.
+>Note: The indexes are 1-based, and are set based on the output signal index. For instance, if nothing has been expanded on an XSIG symbol in SIMPL Windows where you have aout1 and dig_out1, aout1 is index 1 and dig_out1 is index 2. If there are no signals defined in the aout## spots, then dig_out1 seems to take index 1.
 
 >Important: Always ensure that your signal alignment matches your code to mitigate error log spam. If your datatypes and data don't match the symbol defined in your SIMPL Windows program, your logfile will be full of "Signal Mismatch in receive of Intersystem Communications" messages.
