@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Crestron.SimplSharp.CrestronIO;
 using XSigUtilityLibrary.Intersystem.Serialization;
 using XSigUtilityLibrary.Intersystem.Tokens;
@@ -234,6 +236,30 @@ namespace XSigUtilityLibrary.Intersystem
             }
 
             return bytes;
+        }
+        
+        /// <summary>
+        /// Returns a collection of XSigTokens from the input string.
+        /// </summary>
+        /// <param name="xSig">XSig data.</param>
+        /// <returns>XSigToken collection.</returns>
+        public static IEnumerable<XSigToken> GetTokens(string xSig)
+        {
+            return GetTokens(Encoding.GetEncoding(28591).GetBytes(xSig));
+        }
+
+        /// <summary>
+        /// Returns a collection of XSigTokens from the input byte array.
+        /// </summary>
+        /// <param name="xSig">XSig data.</param>
+        /// <returns>XSigToken collection.</returns>
+        public static IEnumerable<XSigToken> GetTokens(byte[] xSig)
+        {
+            using (var memoryStream = new MemoryStream(xSig))
+            {
+                using (var tokenReader = new XSigTokenStreamReader(memoryStream))
+                    return tokenReader.ReadAllXSigTokens();
+            }
         }
     }
 }
