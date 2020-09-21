@@ -10,6 +10,9 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         public XSigSerialToken(int index, string value)
             : base(index)
         {
+            if (value == null)
+                throw new ArgumentNullException("value");
+            
             // 10-bits available for serial encoded data
             if (index >= 1024 || index < 0)
                 throw new ArgumentOutOfRangeException("index");
