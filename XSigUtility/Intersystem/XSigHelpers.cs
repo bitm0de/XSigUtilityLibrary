@@ -150,6 +150,9 @@ namespace XSigUtilityLibrary.Intersystem
         /// <returns>Byte sequence in XSig format for digital signal information.</returns>
         public static byte[] GetBytes(KeyValuePair<int, bool>[] values, int offset)
         {
+            if (values == null)
+                throw new ArgumentNullException("values");
+
             // Digital XSig data is 2 bytes per value
             const int fixedLength = 2;
             var bytes = new byte[values.Length * fixedLength];
@@ -229,6 +232,9 @@ namespace XSigUtilityLibrary.Intersystem
         /// <returns>Byte sequence in XSig format for analog signal information.</returns>
         public static byte[] GetBytes(KeyValuePair<int, ushort>[] values, int offset)
         {
+            if (values == null)
+                throw new ArgumentNullException("values");
+
             // Analog XSig data is 4 bytes per value
             const int fixedLength = 4;
             var bytes = new byte[values.Length * fixedLength];
@@ -315,6 +321,9 @@ namespace XSigUtilityLibrary.Intersystem
         /// <returns>Byte sequence in XSig format for serial signal information.</returns>
         public static byte[] GetBytes(KeyValuePair<int, string>[] values, int offset)
         {
+            if (values == null)
+                throw new ArgumentNullException("values");
+
             // Serial XSig data is not fixed-length like the other formats
             var dstOffset = 0;
             var bytes = new byte[values.Sum(kv => (kv.Value ?? string.Empty).Length + 3)];
