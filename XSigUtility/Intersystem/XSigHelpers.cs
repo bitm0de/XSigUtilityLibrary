@@ -22,6 +22,8 @@ using XSigUtilityLibrary.Intersystem.Tokens;
 
 namespace XSigUtilityLibrary.Intersystem
 {
+    // ReSharper disable once UnusedType.Global
+    
     /// <summary>
     /// Helper methods for creating XSig byte sequences compatible with the Intersystem Communications (ISC) symbol.
     /// </summary>
@@ -131,6 +133,33 @@ namespace XSigUtilityLibrary.Intersystem
         }
 
         /// <summary>
+        /// Get byte sequence for specified digital value pairs.
+        /// </summary>
+        /// <param name="values">Digital index/value pairs.</param>
+        /// <returns>Byte sequence in XSig format for digital signal information.</returns>
+        public static byte[] GetBytes(KeyValuePair<int, bool>[] values)
+        {
+            return GetBytes(values, 0);
+        }
+        
+        /// <summary>
+        /// Get byte sequence for specified digital value pairs.
+        /// </summary>
+        /// <param name="values">Digital index/value pairs.</param>
+        /// <param name="offset">Index offset.</param>
+        /// <returns>Byte sequence in XSig format for digital signal information.</returns>
+        public static byte[] GetBytes(KeyValuePair<int, bool>[] values, int offset)
+        {
+            // Digital XSig data is 2 bytes per value
+            const int fixedLength = 2;
+            var bytes = new byte[values.Length * fixedLength];
+            for (var i = 0; i < values.Length; i++)
+                Buffer.BlockCopy(GetBytes(values[i].Key, offset, values[i].Value), 0, bytes, i * fixedLength, fixedLength);
+
+            return bytes;
+        }
+
+        /// <summary>
         /// Get bytes for a single analog signal.
         /// </summary>
         /// <param name="index">1-based analog index</param>
@@ -178,6 +207,33 @@ namespace XSigUtilityLibrary.Intersystem
             var bytes = new byte[values.Length * fixedLength];
             for (var i = 0; i < values.Length; i++)
                 Buffer.BlockCopy(GetBytes(startIndex++, offset, values[i]), 0, bytes, i * fixedLength, fixedLength);
+
+            return bytes;
+        }
+        
+        /// <summary>
+        /// Get byte sequence for specified analog value pairs.
+        /// </summary>
+        /// <param name="values">Analog index/value pairs.</param>
+        /// <returns>Byte sequence in XSig format for analog signal information.</returns>
+        public static byte[] GetBytes(KeyValuePair<int, ushort>[] values)
+        {
+            return GetBytes(values, 0);
+        }
+        
+        /// <summary>
+        /// Get byte sequence for specified analog value pairs.
+        /// </summary>
+        /// <param name="values">Analog index/value pairs.</param>
+        /// <param name="offset">Index offset.</param>
+        /// <returns>Byte sequence in XSig format for analog signal information.</returns>
+        public static byte[] GetBytes(KeyValuePair<int, ushort>[] values, int offset)
+        {
+            // Analog XSig data is 4 bytes per value
+            const int fixedLength = 4;
+            var bytes = new byte[values.Length * fixedLength];
+            for (var i = 0; i < values.Length; i++)
+                Buffer.BlockCopy(GetBytes(values[i].Key, offset, values[i].Value), 0, bytes, i * fixedLength, fixedLength);
 
             return bytes;
         }
@@ -234,6 +290,37 @@ namespace XSigUtilityLibrary.Intersystem
             for (var i = 0; i < values.Length; i++)
             {
                 var data = GetBytes(startIndex++, offset, values[i]);
+                Buffer.BlockCopy(data, 0, bytes, dstOffset, data.Length);
+                dstOffset += data.Length;
+            }
+
+            return bytes;
+        }
+        
+        /// <summary>
+        /// Get byte sequence for specified serial value pairs.
+        /// </summary>
+        /// <param name="values">Serial index/value pairs.</param>
+        /// <returns>Byte sequence in XSig format for serial signal information.</returns>
+        public static byte[] GetBytes(KeyValuePair<int, string>[] values)
+        {
+            return GetBytes(values, 0);
+        }
+        
+        /// <summary>
+        /// Get byte sequence for specified serial value pairs.
+        /// </summary>
+        /// <param name="values">Serial index/value pairs.</param>
+        /// <param name="offset">Index offset.</param>
+        /// <returns>Byte sequence in XSig format for serial signal information.</returns>
+        public static byte[] GetBytes(KeyValuePair<int, string>[] values, int offset)
+        {
+            // Serial XSig data is not fixed-length like the other formats
+            var dstOffset = 0;
+            var bytes = new byte[values.Sum(kv => (kv.Value ?? string.Empty).Length + 3)];
+            for (var i = 0; i < values.Length; i++)
+            {
+                var data = GetBytes(values[i].Key, offset, values[i].Value);
                 Buffer.BlockCopy(data, 0, bytes, dstOffset, data.Length);
                 dstOffset += data.Length;
             }
