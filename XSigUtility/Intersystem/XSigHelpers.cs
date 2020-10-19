@@ -202,7 +202,7 @@ namespace XSigUtilityLibrary.Intersystem
         /// <returns>Bytes in XSig format for serial signal information.</returns>
         public static byte[] GetBytes(int index, int offset, string value)
         {
-            return new XSigSerialToken(index + offset, value).GetBytes();
+            return new XSigSerialToken(index + offset, value ?? string.Empty).GetBytes();
         }
 
         /// <summary>
@@ -225,9 +225,12 @@ namespace XSigUtilityLibrary.Intersystem
         /// <returns>Byte sequence in XSig format for serial signal information.</returns>
         public static byte[] GetBytes(int startIndex, int offset, string[] values)
         {
+            if (values == null)
+                throw new ArgumentNullException("values");
+                
             // Serial XSig data is not fixed-length like the other formats
             var dstOffset = 0;
-            var bytes = new byte[values.Sum(v => v.Length + 3)];
+            var bytes = new byte[values.Sum(v => (v ?? string.Empty).Length + 3)];
             for (var i = 0; i < values.Length; i++)
             {
                 var data = GetBytes(startIndex++, offset, values[i]);
