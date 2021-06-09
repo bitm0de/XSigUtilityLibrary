@@ -18,6 +18,6 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         /// <summary>
         /// Serial signal datatype.
         /// </summary>
-        Serial
+        Serial,
     }
 }
