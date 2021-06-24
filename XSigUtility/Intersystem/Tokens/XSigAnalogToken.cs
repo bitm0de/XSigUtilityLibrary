@@ -28,8 +28,9 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
 
         public override byte[] GetBytes()
         {
+            // For Index Values == multiples of 128, the first byte overflowed an index too early
             return new[] {
-                (byte)(0xC0 | ((Value & 0xC000) >> 10) | (Index >> 7)),
+                (byte)(0xC0 | ((Value & 0xC000) >> 10) | (Index - (Index == 1 ? 0 : 1)>> 7)),
                 (byte)((Index - 1) & 0x7F),
                 (byte)((Value & 0x3F80) >> 7),
                 (byte)(Value & 0x7F),
