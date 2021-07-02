@@ -14,7 +14,7 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
                 throw new ArgumentNullException("value");
             
             // 10-bits available for serial encoded data
-            if (index >= 1024 || index < 0)
+            if (index >= 1024 || index < 1)
                 throw new ArgumentOutOfRangeException("index");
 
             _value = value;

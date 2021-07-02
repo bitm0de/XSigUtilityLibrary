@@ -10,7 +10,7 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
             : base(index)
         {
             // 10-bits available for analog encoded data
-            if (index >= 1024 || index < 0)
+            if (index >= 1024 || index < 1)
                 throw new ArgumentOutOfRangeException("index");
 
             _value = value;
