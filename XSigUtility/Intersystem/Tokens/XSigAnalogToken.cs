@@ -10,7 +10,7 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
             : base(index)
         {
             // 10-bits available for analog encoded data
-            if (index >= 1024 || index < 0)
+            if (index >= 1024 || index < 1)
                 throw new ArgumentOutOfRangeException("index");
 
             _value = value;
@@ -29,7 +29,7 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         public override byte[] GetBytes()
         {
             return new[] {
-                (byte)(0xC0 | ((Value & 0xC000) >> 10) | (Index >> 7)),
+                (byte)(0xC0 | ((Value & 0xC000) >> 10) | ((Index - 1) >> 7)),
                 (byte)((Index - 1) & 0x7F),
                 (byte)((Value & 0x3F80) >> 7),
                 (byte)(Value & 0x7F),

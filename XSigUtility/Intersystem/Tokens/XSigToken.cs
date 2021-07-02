@@ -10,7 +10,7 @@ namespace XSigUtilityLibrary.Intersystem.Tokens
         /// <summary>
         /// Constructs an XSigToken with the specified index.
         /// </summary>
-        /// <param name="index">Index for the data.</param>
+        /// <param name="index">1-based index for the data.</param>
         protected XSigToken(int index)
         {
             _index = index;
