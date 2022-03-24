@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharp.CrestronIO;
-using XSigUtilityLibrary.Intersystem.Serialization;
-using XSigUtilityLibrary.Intersystem.Tokens;
+using XSigUtilityLibrary.Tokens;
 
-namespace XSigUtilityLibrary.Intersystem
+namespace XSigUtilityLibrary
 {
     /// <summary>
     /// XSigToken stream reader.
@@ -48,7 +47,7 @@ namespace XSigUtilityLibrary.Intersystem
         /// <param name="stream">Input stream</param>
         /// <param name="value">Result</param>
         /// <returns>True if successful, otherwise false.</returns>
-        public static bool TryReadUInt16BE(Stream stream, out ushort value)
+        public static bool TryReadUInt16BigEndian(Stream stream, out ushort value)
         {
             value = 0;
             if (stream.Length < 2)
@@ -68,7 +67,7 @@ namespace XSigUtilityLibrary.Intersystem
         public XSigToken ReadXSigToken()
         {
             ushort prefix;
-            if (!TryReadUInt16BE(_stream, out prefix))
+            if (!TryReadUInt16BigEndian(_stream, out prefix))
                 return null;
 
             if ((prefix & 0xF880) == 0xC800) // Serial data
@@ -92,7 +91,7 @@ namespace XSigUtilityLibrary.Intersystem
             if ((prefix & 0xC880) == 0xC000) // Analog data
             {
                 ushort data;
-                if (!TryReadUInt16BE(_stream, out data))
+                if (!TryReadUInt16BigEndian(_stream, out data))
                     return null;
 
                 var index = ((prefix & 0x0700) >> 1) | (prefix & 0x7F);
@@ -122,17 +121,6 @@ namespace XSigUtilityLibrary.Intersystem
                 tokens.Add(token);
 
             return tokens;
-        }
-
-        /// <summary>
-        /// Attempts to deserialize all XSig data within the stream from the current position.
-        /// </summary>
-        /// <typeparam name="T">Type to deserialize the information to.</typeparam>
-        /// <returns>Deserialized object.</returns>
-        public T DeserializeStream<T>()
-            where T : class, IXSigSerialization, new()
-        {
-            return new T().Deserialize<T>(ReadAllXSigTokens());
         }
 
         /// <summary>

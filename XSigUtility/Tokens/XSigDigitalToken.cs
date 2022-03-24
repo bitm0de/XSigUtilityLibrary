@@ -1,6 +1,6 @@
 using System;
 
-namespace XSigUtilityLibrary.Intersystem.Tokens
+namespace XSigUtilityLibrary.Tokens
 {
     public sealed class XSigDigitalToken : XSigToken
     {

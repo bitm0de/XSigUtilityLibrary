@@ -1,4 +1,4 @@
-namespace XSigUtilityLibrary.Intersystem.Tokens
+namespace XSigUtilityLibrary.Tokens
 {
     /// <summary>
     /// Represents the base class for all XSig datatypes.

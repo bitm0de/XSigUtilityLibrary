@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Crestron.SimplSharp.CrestronIO;
-using XSigUtilityLibrary.Intersystem.Serialization;
-using XSigUtilityLibrary.Intersystem.Tokens;
+using XSigUtilityLibrary.Tokens;
 
 /*
     Digital (2 bytes)
@@ -20,7 +19,7 @@ using XSigUtilityLibrary.Intersystem.Tokens;
         11111111 <- denotes end of data
 */
 
-namespace XSigUtilityLibrary.Intersystem
+namespace XSigUtilityLibrary
 {
     // ReSharper disable once UnusedType.Global
     
@@ -49,35 +48,6 @@ namespace XSigUtilityLibrary.Intersystem
         public static byte[] SendStatus()
         {
             return new byte[] { 0xFD };
-        }
-
-        /// <summary>
-        /// Get bytes for an IXSigStateResolver object.
-        /// </summary>
-        /// <param name="xSigSerialization">XSig state resolver.</param>
-        /// <returns>Bytes in XSig format for each token within the state representation.</returns>
-        public static byte[] GetBytes(IXSigSerialization xSigSerialization)
-        {
-            return GetBytes(xSigSerialization, 0);
-        }
-
-        /// <summary>
-        /// Get bytes for an IXSigStateResolver object, with a specified offset.
-        /// </summary>
-        /// <param name="xSigSerialization">XSig state resolver.</param>
-        /// <param name="offset">Offset to which the data will be aligned.</param>
-        /// <returns>Bytes in XSig format for each token within the state representation.</returns>
-        public static byte[] GetBytes(IXSigSerialization xSigSerialization, int offset)
-        {
-            var tokens = xSigSerialization.Serialize();
-            if (tokens == null) return new byte[0];
-            using (var memoryStream = new MemoryStream())
-            {
-                using (var tokenWriter = new XSigTokenStreamWriter(memoryStream))
-                    tokenWriter.WriteXSigData(xSigSerialization, offset);
-
-                return memoryStream.ToArray();
-            }
         }
 
         /// <summary>

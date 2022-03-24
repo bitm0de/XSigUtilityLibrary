@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace XSigUtilityLibrary.Intersystem.Tokens
+namespace XSigUtilityLibrary.Tokens
 {
     public sealed class XSigSerialToken : XSigToken
     {

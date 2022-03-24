@@ -1,11 +1,9 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using Crestron.SimplSharp.CrestronIO;
-using XSigUtilityLibrary.Intersystem.Serialization;
-using XSigUtilityLibrary.Intersystem.Tokens;
+using XSigUtilityLibrary.Tokens;
 
-namespace XSigUtilityLibrary.Intersystem
+namespace XSigUtilityLibrary
 {
     /// <summary>
     /// XSigToken stream writer.
@@ -44,29 +42,6 @@ namespace XSigUtilityLibrary.Intersystem
         }
 
         /// <summary>
-        /// Write XSig data gathered from an IXSigStateResolver to the stream.
-        /// </summary>
-        /// <param name="xSigSerialization">IXSigStateResolver object.</param>
-        public void WriteXSigData(IXSigSerialization xSigSerialization)
-        {
-            WriteXSigData(xSigSerialization, 0);
-        }
-
-        /// <summary>
-        /// Write XSig data gathered from an IXSigStateResolver to the stream.
-        /// </summary>
-        /// <param name="xSigSerialization">IXSigStateResolver object.</param>
-        /// <param name="offset">Index offset for each XSigToken.</param>
-        public void WriteXSigData(IXSigSerialization xSigSerialization, int offset)
-        {
-            if (xSigSerialization == null)
-                throw new ArgumentNullException("xSigSerialization");
-
-            var tokens = xSigSerialization.Serialize();
-            WriteXSigData(tokens, offset);
-        }
-
-        /// <summary>
         /// Write XSigToken to the stream.
         /// </summary>
         /// <param name="token">XSigToken object.</param>
@@ -83,15 +58,6 @@ namespace XSigUtilityLibrary.Intersystem
         public void WriteXSigData(XSigToken token, int offset)
         {
             WriteXSigData(new[] { token }, offset);
-        }
-
-        /// <summary>
-        /// Writes an array of XSigTokens to the stream.
-        /// </summary>
-        /// <param name="tokens">XSigToken objects.</param>
-        public void WriteXSigData(XSigToken[] tokens)
-        {
-            WriteXSigData(tokens.AsEnumerable());
         }
 
         /// <summary>
@@ -115,7 +81,7 @@ namespace XSigUtilityLibrary.Intersystem
 
             if (tokens != null)
             {
-                foreach (var token in tokens)
+                foreach (XSigToken token in tokens)
                 {
                     if (token == null) continue;
                     var bytes = token.GetTokenWithOffset(offset).GetBytes();
